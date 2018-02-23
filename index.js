@@ -1,4 +1,8 @@
-const { getVideoById } = require('./src/data');
+const {
+  getVideoById,
+  getVideos,
+  createVideo,
+} = require('./src/data');
 
 const {
   GraphQLSchema,
@@ -7,6 +11,8 @@ const {
   GraphQLString,
   GraphQLInt,
   GraphQLBoolean,
+  GraphQLNonNull,
+  GraphQLList,
 } = require('graphql');
 const express = require('express');
 const graphqlHTTP = require('express-graphql');
@@ -22,22 +28,25 @@ const videoType = new GraphQLObjectType({
   description: 'The video type',
   fields: {
     id: {
-      type: GraphQLID,
+      type: new GraphQLNonNull(GraphQLID),
       description: 'A unique identifier',
-
     },
     title: {
-      type: GraphQLString,
-      description: 'title',
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'The title of the video',
     },
     duration: {
-      type: GraphQLInt,
+      type: new GraphQLNonNull(GraphQLInt),
       description: 'The duration of the video in seconds',
     },
     watched: {
-      type: GraphQLBoolean,
+      type: new GraphQLNonNull(GraphQLBoolean),
       description: 'Whether it has been watched or not'
     },
+    released: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+      description: 'Whether it has been released or not'
+    }
   }
 });
 
@@ -45,21 +54,52 @@ const queryType = new GraphQLObjectType({
   name: 'QueryType',
   description: 'The root query type',
   fields: {
+    videos: {
+      type: new GraphQLList(videoType),
+      description: 'A list of videos',
+      resolve: () => getVideos(),
+    },
     video: {
       type: videoType,
       args: {
         id: {
-          type: GraphQLID,
+          type: new GraphQLNonNull(GraphQLID),
           description: 'The id of a video'
         }
       },
       resolve: (_, args) => getVideoById(args.id),
     }
   }
-})
+});
+
+const mutationType = new GraphQLObjectType({
+  name: 'Mutation',
+  description: 'The root Mutation type',
+  fields: {
+    createVideo: {
+      type: videoType,
+      args: {
+        title: {
+          type: new GraphQLNonNull(GraphQLString),
+          description: 'The title of the video',
+        },
+        duration: {
+          type: new GraphQLNonNull(GraphQLInt),
+          description: 'The duration of the video in seconds',
+        },
+        released: {
+          type: new GraphQLNonNull(GraphQLBoolean),
+          description: 'Whether it has been released or not'
+        }
+      },
+      resolve: (_, args) => createVideo(args),
+    }
+  }
+});
 
 const schema = new GraphQLSchema({
-  query: queryType
+  query: queryType,
+  mutation: mutationType,
 });
 
 

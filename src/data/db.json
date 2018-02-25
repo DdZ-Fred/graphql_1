@@ -1,0 +1,68 @@
+{
+  "idInc": 10,
+  "videos": [
+    {
+      "id": "1",
+      "title": "foo",
+      "duration": 120,
+      "watched": false,
+      "released": true
+    },
+    {
+      "id": "2",
+      "title": "foo2",
+      "duration": 3200,
+      "watched": false,
+      "released": false
+    },
+    {
+      "id": "3",
+      "title": "el gato",
+      "duration": 120,
+      "released": false,
+      "watched": false
+    },
+    {
+      "id": "4",
+      "title": "bapo",
+      "duration": 6590,
+      "released": true,
+      "watched": false
+    },
+    {
+      "id": "5",
+      "title": "blabla",
+      "duration": 430,
+      "released": true,
+      "watched": false
+    },
+    {
+      "id": "6",
+      "title": "another video",
+      "duration": 4500,
+      "released": true,
+      "watched": false
+    },
+    {
+      "id": "7",
+      "title": "New video via POST",
+      "duration": 4500,
+      "released": false,
+      "watched": false
+    },
+    {
+      "id": "8",
+      "title": "Batch query 1",
+      "duration": 1,
+      "released": false,
+      "watched": false
+    },
+    {
+      "id": "9",
+      "title": "Batch query 2",
+      "duration": 2,
+      "released": true,
+      "watched": false
+    }
+  ]
+}

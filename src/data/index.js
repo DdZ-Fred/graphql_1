@@ -1,44 +1,36 @@
-const videoA = {
-  id: '1',
-  title: 'foo',
-  duration: 120,
-  watched: false,
-  released: true,
-};
+const db = require('./db');
 
-const videoB = {
-  id: '2',
-  title: 'foo2',
-  duration: 3200,
-  watched: false,
-  released: false
-};
-
-const videos = [videoA, videoB];
+console.log('Initial Posts: ', db.get('videos').value());
 
 module.exports.getVideoById = function(id) {
   return new Promise((resolve, reject) => {
-    resolve(videos.find(video => video.id === id));
+    const requestedVideo = db.get('videos').find({ id }).value();
+
+    resolve(requestedVideo);
   });
 }
 
 module.exports.getVideos = function() {
-  return new Promise((resolve, reject) => resolve(videos));
+  return new Promise((resolve, reject) => resolve(db.get('videos').value()));
 }
 
 module.exports.createVideo = function({ title, duration, released }) {
   return new Promise((resolve, reject) => {
-
-    const video = {
-      id: Date.now,
+    const newVideoId = +db.get('idInc').value();
+    const newVideo = {
+      id: `${newVideoId}`,
       title,
       duration,
       released,
       watched: false,
     };
 
-    videos.push(video);
+    db.get('videos')
+      .push(newVideo)
+      .write();
+    db.set('idInc', newVideoId + 1)
+      .write();
 
-    resolve(video);
+    resolve(newVideo);
   });
 }
